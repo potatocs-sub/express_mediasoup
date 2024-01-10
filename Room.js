@@ -18,15 +18,14 @@ module.exports = class Room {
     }
 
     getProducerListForPeer() {
-        console.log(this.peers)
+        console.log('이게 실행이 돼야 하는데 ', this.peers)
         let producerList = [];
         this.peers.forEach((peer) => {
-            if (peer.produce)
-                peer.producer.forEach((producer) => {
-                    producerList.push({
-                        producer_id: producer.id
-                    })
+            peer.producers.forEach((producer) => {
+                producerList.push({
+                    producer_id: producer.id
                 })
+            })
         })
         return producerList
     }
