@@ -98,9 +98,9 @@ module.exports = class Room {
             console.error('can not consume')
             return
         }
-
+        console.log('와우')
         let { consumer, params } = await this.peers.get(socket_id).createConsumer(consumer_transport_id, producer_id, rtpCapabilities)
-
+        console.log(consumer)
         consumer.on(
             'producerclose',
             function () {

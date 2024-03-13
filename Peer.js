@@ -28,6 +28,7 @@ module.exports = class Peer {
     // rtpParameter는 RTP 패킷의 코덱, 해상도, 비트레이트 등의 설정을 포함
     // kind는 audio, video, applicatio 등을 포함
     async createProducer(producerTransportId, rtpParameters, kind) {
+        // console.log('프로튜서 생성', rtpParameters)
         let producer = await this.transports.get(producerTransportId).produce({
             kind,
             rtpParameters
@@ -61,6 +62,8 @@ module.exports = class Peer {
                 rtpCapabilities,
                 paused: false // producer.kind === 'video'
             })
+
+            // consumer.rtpParameters.encodings[0].maxBitrate = 100000
         } catch (error) {
             console.error('Consume failed', error)
             return
@@ -70,8 +73,9 @@ module.exports = class Peer {
         if (consumer.type === 'simulcast') {
             await consumer.setPreferredLayers({
                 spatialLayer: 2,
-                temporalLayer: 2
+                temporalLayer: 0
             })
+
         }
 
         this.consumers.set(consumer.id, consumer)
@@ -84,7 +88,12 @@ module.exports = class Peer {
             }.bind(this)
         )
 
-        console.log(consumer.rtpParameters)
+        consumer.on('layerschange', function (layers) {
+            consumer.currentLayers
+            console.log('레이어', layers, consumer.currentLayers)
+
+        }.bind(this))
+
         return {
             consumer,
             params: {
