@@ -87,6 +87,7 @@ module.exports = class Room {
         )
     }
 
+
     async consume(socket_id, consumer_transport_id, producer_id, rtpCapabilities) {
         // handle nulls
         if (
