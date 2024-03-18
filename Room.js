@@ -14,16 +14,21 @@ module.exports = class Room {
     }
 
     addPeer(peer) {
+        console.log(peer, '피어')
         this.peers.set(peer.id, peer)
+        console.log(this.peers)
     }
 
     getProducerListForPeer() {
         console.log('이게 실행이 돼야 하는데 ', this.peers)
         let producerList = [];
+        console.log(this.peers)
         this.peers.forEach((peer) => {
             peer.producers.forEach((producer) => {
+
                 producerList.push({
                     producer_id: producer.id,
+                    producer_socket_id: peer.id,
                     name: peer.name
                 })
             })
@@ -101,10 +106,10 @@ module.exports = class Room {
             console.error('can not consume')
             return
         }
-        console.log(producer_socket_id)
-        console.log('와우', this.peers.get(producer_socket_id).name)
+        // console.log(producer_socket_id)
+        // console.log('와우', this.peers.get(producer_socket_id).name)
         let { consumer, params } = await this.peers.get(socket_id).createConsumer(consumer_transport_id, producer_id, rtpCapabilities)
-        console.log(consumer, params)
+        // console.log(consumer, params, this.peers, producer_id, producer_socket_id)
         consumer.on(
             'producerclose',
             function () {
