@@ -190,14 +190,15 @@ io.on('connection', (socket) => {
         })
 
         callback({
-            producer_id
+            producer_id, type: `${kind}`, name: `${roomList.get(socket.room_id).getPeers().get(socket.id).name}`
         })
     })
 
     // 수신
-    socket.on('consume', async ({ consumerTransportId, producerId, rtpCapabilities }, callback) => {
-        let params = await roomList.get(socket.room_id).consume(socket.id, consumerTransportId, producerId, rtpCapabilities)
+    socket.on('consume', async ({ consumerTransportId, producerId, rtpCapabilities, producer_socket_id }, callback) => {
+        let { params, name } = await roomList.get(socket.room_id).consume(socket.id, consumerTransportId, producerId, rtpCapabilities, producer_socket_id)
 
+        console.log('파람파람', params)
         console.log('Consuming', {
             name: `${roomList.get(socket.room_id) && roomList.get(socket.room_id).getPeers().get(socket.id).name}`,
             producer_id: `${producerId}`,
@@ -205,7 +206,7 @@ io.on('connection', (socket) => {
             encodings: params.rtpParameters
         })
 
-        callback(params)
+        callback({ params, name })
     })
 
     // 이건 뭐지....
