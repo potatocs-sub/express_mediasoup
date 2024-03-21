@@ -21,7 +21,7 @@ const Room = require('./Room')
 const Peer = require('./Peer')
 
 
-// app.use(express.static(path.join(__dirname, '..', 'public')))
+app.use(express.static(path.join(__dirname, './dist/angular_mediasoup2/browser')))
 
 const allowedOrigins = ['http://localhost:4200', 'http://localhost:4300', 'http://192.168.0.5:4200', 'http://192.168.0.5:4300', 'http://192.168.0.42:4200', 'http://192.168.0.42:4300', 'https://buildingtalks.com'];
 
@@ -41,7 +41,7 @@ const io = new Server(httpsServer, {
     cors: {
         origin: "*"
     },
-    path: '/'
+    path: '/socket/'
 })
 
 // all mediasoup workers
